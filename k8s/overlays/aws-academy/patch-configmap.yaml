@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalogo-config
+  namespace: oficina-catalogo
+data:
+  CATALOG_TABLE_NAME: REPLACE_WITH_TABLE_NAME
+  CATALOG_EVENTS_TOPIC_ARN: REPLACE_WITH_EVENTS_TOPIC_ARN

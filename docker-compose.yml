@@ -1,0 +1,55 @@
+# Ambiente local do Catálogo: API + relay da outbox + LocalStack (DynamoDB e SNS).
+# O docker-compose com os 5 microsserviços juntos fica no repositório
+# oficina-mecanica-fiap (OS Service).
+x-catalogo-env: &catalogo-env
+  AWS_ACCESS_KEY_ID: test
+  AWS_SECRET_ACCESS_KEY: test
+  AWS_REGION: us-east-1
+  AWS_ENDPOINT_URL: http://localstack:4566
+  CATALOG_TABLE_NAME: oficina-catalogo
+  CATALOG_EVENTS_TOPIC_ARN: arn:aws:sns:us-east-1:000000000000:catalogo-eventos
+  BOOTSTRAP_LOCAL_RESOURCES: "true"
+  JWT_SECRET_KEY: change-me-in-production
+  ADMIN_USERNAME: admin
+
+services:
+  localstack:
+    image: localstack/localstack:4
+    container_name: catalogo-localstack
+    environment:
+      SERVICES: dynamodb,sns,sqs
+    ports:
+      - "4566:4566"
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: .
+    container_name: catalogo-api
+    environment:
+      <<: *catalogo-env
+      SEED_ON_START: "true"
+    ports:
+      - "8001:8000"
+    depends_on:
+      localstack:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  outbox-relay:
+    build: .
+    container_name: catalogo-outbox-relay
+    command: ["relay"]
+    environment:
+      <<: *catalogo-env
+    depends_on:
+      api:
+        condition: service_healthy

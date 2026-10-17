@@ -1,5 +1,7 @@
 # oficina-mecanica-catalogo
 
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=phantosmia_oficina-mecanica-catalogo&metric=alert_status)](https://sonarcloud.io/summary/overall?id=phantosmia_oficina-mecanica-catalogo) [![Cobertura](https://sonarcloud.io/api/project_badges/measure?project=phantosmia_oficina-mecanica-catalogo&metric=coverage)](https://sonarcloud.io/component_measures?id=phantosmia_oficina-mecanica-catalogo&metric=coverage)
+
 Microsserviço de **Catálogo** do sistema da oficina mecânica (Tech Challenge FIAP, Fase 4): mantém os **serviços oferecidos** (preço e tempo estimado) e as **fichas de peças** (SKU, preço e atributos específicos de cada tipo de peça).
 
 É um dos 5 microsserviços do sistema. A divisão, a saga e o contrato entre os serviços estão documentados no repositório principal, [oficina-mecanica-fiap](https://github.com/phantosmia/oficina-mecanica-fiap):
